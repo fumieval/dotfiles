@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sha256sum <<< "$USER-$(hostname --short)-$(git rev-parse --show-toplevel)" | xxd -r -p | base32 | head -c 4
+

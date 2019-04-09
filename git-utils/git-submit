@@ -1,0 +1,9 @@
+#!/bin/bash
+
+current="$(git symbolic-ref --short HEAD)"
+
+if grep "$(git suffix)$" <<< "$current" > /dev/null; then
+  git push -u origin "$current" --force
+else
+  echo "You are on $current; refusing to push" >&2
+fi

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+branch="$1-$(git suffix)"
+
+git fetch -p
+git checkout $branch || git checkout -b $branch $(git branch -r | grep "$1$") || git checkout -b $branch "$(git-base)"
