@@ -1,0 +1,2 @@
+#!/bin/bash
+head -c 2 /dev/urandom | base32 | head -c 4 > "$(git rev-parse --show-toplevel)/.git/checkout_id"

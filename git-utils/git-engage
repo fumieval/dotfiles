@@ -1,6 +1,10 @@
 #!/bin/sh
 
-branch="$1-$(git suffix)"
+if [ -z $1 ]; then
+  branch="$(git suffix)"
+else
+  branch="$1-$(git suffix)"
+fi
 
 git fetch -p
 git checkout $branch || git checkout -b $branch $(git branch -r | grep "$1$") || git checkout -b $branch "$(git-base)"
