@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+root=$(git rev-parse --show-toplevel)
+
+if ! [ -e $root/.git/checkout_id ]; then
+  head -c 4 /dev/urandom | base64 | head -c 4 > "$root/.git/checkout_id"
+  echo "Generated a checkout identifier."
+fi
+
+if ! git remote get-url origin > /dev/null; then
+  echo -n "Enter the url of the upstream: "
+  read url
+  git remote add origin "$url"
+  git remote add $USER "$url"
+  git remote set-head origin -a
+fi
+
+if ! git remote get-url $USER > /dev/null; then
+  echo -n "Enter the url of your repo: "
+  read url
+  git remote add $USER "$url"
+fi
