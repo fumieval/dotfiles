@@ -1,3 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-git grapple && git push origin "$(git symbolic-ref --short HEAD):$(git base | cut -d '/' -f 2)"
+git engage $1 || exit 1
+branch=$(git ensure-suffix) || exit 1
+git grapple || exit 1
+git push origin "$branch:$(git base | cut -d '/' -f 2)" || exit 1
+
+if [ "$branch" != "$(git suffix)" ]; then
+  git engage && git branch -D "$branch" && git push origin --delete "$branch"
+fi

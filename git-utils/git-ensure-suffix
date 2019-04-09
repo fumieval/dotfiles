@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+current=$(git symbolic-ref --short HEAD)
+
+if grep "$(git suffix)$" <<< "$current" > /dev/null; then
+  echo "$current"
+else
+  echo "You are on $current; aborting." >&2
+  exit 1
+fi

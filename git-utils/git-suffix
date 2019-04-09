@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 cat "$(git rev-parse --show-toplevel)/.git/checkout_id"
 

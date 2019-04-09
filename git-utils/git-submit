@@ -1,9 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-current="$(git symbolic-ref --short HEAD)"
-
-if grep "$(git suffix)$" <<< "$current" > /dev/null; then
-  git push "$USER" "$current" --force
-else
-  echo "You are on $current; refusing to push" >&2
-fi
+current=$(git ensure-suffix) || exit 1
+git push "$USER" "$current" --force
