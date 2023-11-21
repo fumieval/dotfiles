@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Abort if it is not on a branch
+if [[ $(git rev-parse --abbrev-ref HEAD) == "HEAD" ]]; then
+  exit 0
+fi
+
 # Abort if a preivious commit message already exists
 if (( $(grep -v "^#" "$1" | wc -l) > 1 )); then
   exit 0
