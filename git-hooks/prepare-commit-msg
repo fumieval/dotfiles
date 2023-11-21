@@ -1,0 +1,13 @@
+#!/bin/sh
+original=$(cat $1)
+
+pattern=.
+if [ -e .gitattributes ]; then
+  pattern=$(sed 's/#.*//' .gitattributes | awk 'NF==0 {next} /^#.*/ {next} {print ":^" $1}')
+fi
+
+# https://github.com/kardolus/chatgpt-cli
+chatgpt 'Generate a terse but descriptive commit message from the following diff' \
+  "$(git diff --cached -- "$pattern" | head -n100)" > $1
+
+echo "$original" >> $1
