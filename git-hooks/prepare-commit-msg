@@ -1,5 +1,11 @@
-#!/bin/sh
-original=$(cat $1)
+#!/usr/bin/env bash
+
+# Abort if a preivious commit message already exists
+if (( $(grep -v "^#" "$1" | wc -l) > 1 )); then
+  exit 0
+fi
+
+original=$(grep "^#" "$1")
 
 pattern=.
 if [ -e .gitattributes ]; then
