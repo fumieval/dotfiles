@@ -3,7 +3,7 @@ original=$(cat $1)
 
 pattern=.
 if [ -e .gitattributes ]; then
-  pattern=$(sed 's/#.*//' .gitattributes | awk 'NF==0 {next} /^#.*/ {next} {print ":^" $1}')
+  pattern=$(awk 'NF==0 {next} /^#.*/ {next} /linguist-generated=true/ {print ":^" $1}' < .gitattributes)
 fi
 
 # https://github.com/kardolus/chatgpt-cli
