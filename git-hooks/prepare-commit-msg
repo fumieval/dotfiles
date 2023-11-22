@@ -6,7 +6,7 @@ if [[ $(git rev-parse --abbrev-ref HEAD) == "HEAD" ]]; then
 fi
 
 # Abort if a preivious commit message already exists
-if (( $(grep -v "^#" "$1" | wc -l) > 1 )); then
+if (( $(grep -cv "^#" "$1") > 1 )); then
   exit 0
 fi
 
@@ -17,7 +17,7 @@ if [ -e .gitattributes ]; then
   pattern=$(awk 'NF==0 {next} /^#.*/ {next} /linguist-generated=true/ {print ":^" $1}' < .gitattributes)
 fi
 
-chatgpt '' > $1 <<EOF
+chatgpt '' > "$1" <<EOF
 Generate a descriptive commit message summarising the following diff, following the Conventional Commits format.
 Avoid outputting the diff again.
 $(git diff --name-status -- "$pattern")
@@ -27,4 +27,4 @@ $(git diff --cached -- "$pattern" | head -n100)
 \`\`\`
 EOF
 
-echo "$original" >> $1
+echo "$original" >> "$1"
