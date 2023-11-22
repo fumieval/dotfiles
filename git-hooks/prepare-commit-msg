@@ -19,6 +19,7 @@ fi
 
 chatgpt '' > $1 <<EOF
 Generate a descriptive commit message summarising the following diff, following the Conventional Commits format.
+Avoid outputting the diff again.
 $(git diff --name-status -- "$pattern")
 
 \`\`\`diff
