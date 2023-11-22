@@ -19,11 +19,12 @@ fi
 
 chatgpt '' > "$1" <<EOF
 Generate a descriptive commit message summarising the following diff, following the Conventional Commits format.
-Avoid outputting the diff again.
 $(git diff --name-status --cached -- "$pattern")
 
 $(git diff --cached -- "$pattern" | head -n100)
 
+- don't include the diff
+- don't wrap the output by triple backticks
 EOF
 
 echo "$original" >> "$1"
