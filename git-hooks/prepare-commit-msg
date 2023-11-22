@@ -17,10 +17,10 @@ if [ -e .gitattributes ]; then
   pattern=$(awk 'NF==0 {next} /^#.*/ {next} /linguist-generated=true/ {print ":^" $1}' < .gitattributes)
 fi
 
-chatgpt --set-model gpt-3.5-turbo '' > "$1" <<EOF
+chatgpt '' > "$1" <<EOF
 Generate a descriptive commit message summarising the following diff, following the Conventional Commits format.
 Avoid outputting the diff again.
-$(git diff --name-status -- "$pattern")
+$(git diff --name-status --cached -- "$pattern")
 
 $(git diff --cached -- "$pattern" | head -n100)
 
