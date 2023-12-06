@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-current=$(git ensure-suffix) || exit 1
-git push "$USER" "$current" --force

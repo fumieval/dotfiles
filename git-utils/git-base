@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-if [[ "$(git remote get-url origin)" == *"tsuru/trader" ]]; then
-  echo "base.$(release/bin/base)"
-else
-  git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/@@'
-fi
