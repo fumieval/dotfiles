@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+set -ue
+set -o pipefail
+
+eval "$(clap4shell "$@" <<EOT
+name: chatgpt
+bin_name: $(basename $0)
+version: "0.0"
+about: sample text
+author: Fumiaki Kinoshita <fumiexcel@gmail.com>
+args:
+  - model:
+      long: model
+      takes_value: true
+      default_value: gpt-3.5-turbo-1106
+      help: ID of the model to use
+  - prompt:
+      multiple_values: true
+  - format:
+      long: format
+      takes_value: true
+      default_value: text
+      help: output format
+EOT
+)"
+
+if [ -t 0 ]; then
+  content=$prompt
+else
+  content=$(echo "${prompt:-}"; cat -)
+fi
+
+response=$(curl --silent https://api.openai.com/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -d @- <<EOT
+{
+  "model": "$model",
+  "messages": [
+    {
+      "role": "user",
+      "content": $(echo "${content}" | jq --slurp -R .)
+    }
+  ],
+  "response_format":
+    { "type": "$format" }
+}
+EOT
+)
+echo "$response" | jq -r '.error | select( . != null )' >&2
+echo "${response}" | jq -r '.choices | .[0] | .message | .content'
